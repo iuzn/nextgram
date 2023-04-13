@@ -5,7 +5,7 @@ export default function Modal({ children }) {
   const overlay = useRef();
   const wrapper = useRef();
   const router = useRouter();
-  const scrollPosition = useRef(0);
+  const scrollPosition = useRef();
 
   const onDismiss = useCallback(() => {
     router.back();
@@ -34,10 +34,14 @@ export default function Modal({ children }) {
 
   useEffect(() => {
     scrollPosition.current = window.pageYOffset;
-    return () => {
+    const handleRouteChange = () => {
       window.scrollTo(0, scrollPosition.current);
     };
-  }, []);
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router]);
 
   return (
     <div
