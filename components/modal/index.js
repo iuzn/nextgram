@@ -1,11 +1,11 @@
-"use client";
 import { useCallback, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function Modal({ children }) {
   const overlay = useRef();
   const wrapper = useRef();
   const router = useRouter();
+  const scrollPosition = useRef(0);
 
   const onDismiss = useCallback(() => {
     router.back();
@@ -31,6 +31,13 @@ export default function Modal({ children }) {
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [onKeyDown]);
+
+  useEffect(() => {
+    scrollPosition.current = window.pageYOffset;
+    return () => {
+      window.scrollTo(0, scrollPosition.current);
+    };
+  }, []);
 
   return (
     <div
