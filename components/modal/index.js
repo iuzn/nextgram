@@ -1,5 +1,5 @@
 import { useCallback, useRef, useEffect } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function Modal({ children }) {
   const overlay = useRef();
